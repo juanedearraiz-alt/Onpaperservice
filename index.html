@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On Paper Service | Polarizado y Control Solar de Vidrios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1C2023;
+    --bg-alt:#22262A;
+    --panel:rgba(255,255,255,0.045);
+    --panel-border:rgba(255,255,255,0.09);
+    --copper:#C17A45;
+    --copper-light:#E3A879;
+    --glass-blue:#7FA6B0;
+    --text:#F2EFEA;
+    --text-dim:#9EA4A8;
+    --line:rgba(255,255,255,0.10);
+    --radius:2px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  @media(max-width:640px){.wrap{padding:0 20px;}}
+
+  /* subtle background texture: horizontal glass streaks */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background:
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 140px);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* HEADER */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(28,32,35,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 0;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+  }
+  .brand img{
+    height:26px;width:auto;display:block;
+  }
+  .brand.large img{height:40px;}
+  nav.links{display:flex;gap:32px;font-size:0.88rem;color:var(--text-dim);}
+  nav.links a:hover{color:var(--text);}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 22px;
+    border:1px solid var(--copper);
+    color:var(--bg);
+    background:var(--copper);
+    font-size:0.85rem;font-weight:600;
+    font-family:'Inter',sans-serif;
+    border-radius:2px;
+    transition:transform .18s ease, background .18s ease, box-shadow .18s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{background:var(--copper-light);border-color:var(--copper-light);transform:translateY(-1px);}
+  .btn.ghost{
+    background:transparent;color:var(--text);border-color:var(--panel-border);
+  }
+  .btn.ghost:hover{border-color:var(--text-dim);}
+  @media(max-width:760px){ nav.links{display:none;} }
+
+  /* HERO */
+  .hero{
+    position:relative;z-index:1;
+    padding:96px 0 70px;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;grid-template-columns:1.15fr 0.85fr;gap:64px;align-items:center;
+  }
+  @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:48px;}}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--glass-blue);
+    display:flex;align-items:center;gap:10px;margin-bottom:22px;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--glass-blue);}
+  .hero h1{
+    font-size:clamp(2.3rem,4.6vw,3.6rem);
+    line-height:1.06;
+    margin-bottom:22px;
+  }
+  .hero h1 em{
+    font-style:normal;color:var(--copper-light);
+  }
+  .hero p.lead{
+    font-size:1.06rem;color:var(--text-dim);max-width:480px;margin-bottom:34px;
+  }
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+
+  /* swatch bar - signature element */
+  .swatch-card{
+    background:var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:4px;
+    padding:26px 24px 22px;
+    backdrop-filter:blur(6px);
+  }
+  .swatch-card .label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--text-dim);margin-bottom:16px;
+  }
+  .swatches{display:flex;gap:6px;height:120px;margin-bottom:14px;}
+  .swatch{
+    flex:1;position:relative;border-radius:2px;overflow:hidden;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.08);
+    transition:flex-grow .25s ease;
+  }
+  .swatch .fill{
+    position:absolute;inset:0;
+    background:linear-gradient(155deg, rgba(122,169,182,0.55), rgba(28,32,35,var(--dark)));
+  }
+  .swatch .pct{
+    position:absolute;bottom:8px;left:0;right:0;text-align:center;
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--text);
+    opacity:0.9;
+  }
+  .swatch:hover{flex-grow:1.6;}
+  .swatch-card .note{font-size:0.8rem;color:var(--text-dim);}
+  .swatch-card .note span{color:var(--copper-light);font-family:'JetBrains Mono',monospace;}
+
+  /* STATS STRIP */
+  .stats{
+    padding:44px 0;border-bottom:1px solid var(--line);
+    background:var(--bg-alt);
+    position:relative;z-index:1;
+  }
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;}
+  @media(max-width:760px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+  .stat .num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:1.9rem;color:var(--copper-light);font-weight:500;
+  }
+  .stat .desc{font-size:0.82rem;color:var(--text-dim);margin-top:4px;}
+
+  /* SECTION HEADS */
+  section{position:relative;z-index:1;}
+  .sec{padding:88px 0;border-bottom:1px solid var(--line);}
+  .sec-head{max-width:560px;margin-bottom:52px;}
+  .sec-head .eyebrow{margin-bottom:14px;}
+  .sec-head h2{font-size:clamp(1.7rem,2.8vw,2.3rem);margin-bottom:14px;}
+  .sec-head p{color:var(--text-dim);}
+
+  /* SERVICIOS */
+  .services{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  @media(max-width:900px){.services{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:520px){.services{grid-template-columns:1fr;}}
+  .svc{
+    background:var(--bg);padding:32px 26px;min-height:210px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    transition:background .2s ease;
+  }
+  .svc:hover{background:var(--bg-alt);}
+  .svc .idx{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--copper);}
+  .svc h3{font-size:1.08rem;margin:18px 0 10px;}
+  .svc p{font-size:0.87rem;color:var(--text-dim);}
+
+  /* BENEFICIOS */
+  .benefits{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;}
+  @media(max-width:700px){.benefits{grid-template-columns:1fr;}}
+  .benefit{
+    display:flex;gap:18px;padding:26px 0;border-top:1px solid var(--line);
+  }
+  .benefit:nth-child(2n){padding-left:36px;}
+  @media(max-width:700px){.benefit:nth-child(2n){padding-left:0;}}
+  .benefit .mark2{
+    width:8px;height:8px;border-radius:50%;background:var(--glass-blue);margin-top:8px;flex-shrink:0;
+    box-shadow:0 0 0 4px rgba(127,166,176,0.12);
+  }
+  .benefit h3{font-size:1rem;margin-bottom:6px;}
+  .benefit p{font-size:0.86rem;color:var(--text-dim);}
+
+  /* PROCESO */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;}
+  @media(max-width:760px){.steps{grid-template-columns:1fr;gap:40px;}}
+  .step{position:relative;padding-top:36px;}
+  .step .n{
+    font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--text-dim);
+    position:absolute;top:0;left:0;
+  }
+  .step::before{
+    content:"";position:absolute;top:0;left:38px;right:0;height:1px;
+    background:linear-gradient(90deg,var(--copper),transparent);
+  }
+  @media(max-width:760px){.step::before{left:0;top:20px;}}
+  .step h3{font-size:1.04rem;margin-bottom:8px;}
+  .step p{font-size:0.86rem;color:var(--text-dim);}
+
+  /* CONTACTO */
+  .contact-box{
+    background:var(--panel);border:1px solid var(--panel-border);border-radius:4px;
+    padding:52px 48px;display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;align-items:center;
+  }
+  @media(max-width:760px){.contact-box{grid-template-columns:1fr;padding:36px 26px;}}
+  .contact-box h2{font-size:clamp(1.5rem,2.6vw,2rem);margin-bottom:14px;}
+  .contact-box p{color:var(--text-dim);margin-bottom:26px;font-size:0.94rem;}
+  .contact-links{display:flex;flex-direction:column;gap:14px;}
+  .contact-links a{
+    display:flex;align-items:center;justify-content:space-between;
+    font-family:'JetBrains Mono',monospace;font-size:0.85rem;
+    padding:14px 18px;border:1px solid var(--panel-border);border-radius:2px;
+    color:var(--text-dim);transition:border-color .18s ease,color .18s ease;
+  }
+  .contact-links a:hover{border-color:var(--copper);color:var(--text);}
+  .contact-links a .arrow{color:var(--copper-light);}
+
+  footer{padding:40px 0;}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  .foot-row .brand{font-size:0.95rem;}
+  .foot-row p{font-size:0.78rem;color:var(--text-dim);}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand"><img src="logo-white.png" alt="On Paper Service"></div>
+    <nav class="links">
+      <a href="#servicios">Servicios</a>
+      <a href="#beneficios">Beneficios</a>
+      <a href="#proceso">Proceso</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a class="btn" href="https://wa.me/584121234567" target="_blank" rel="noopener">Cotiza por WhatsApp</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Polarizado &amp; control solar</div>
+      <h1>El sol entra.<br>El calor, <em>no</em>.</h1>
+      <p class="lead">Papel ahumado para vidrios de autos, hogares y oficinas. Bloqueamos el calor y los rayos UV sin sacrificar claridad ni luz natural.</p>
+      <div class="hero-ctas">
+        <a class="btn" href="https://wa.me/584121234567" target="_blank" rel="noopener">Cotiza por WhatsApp</a>
+        <a class="btn ghost" href="#servicios">Ver servicios</a>
+      </div>
+    </div>
+
+    <div class="swatch-card">
+      <div class="label">Niveles de oscurecimiento — VLT %</div>
+      <div class="swatches">
+        <div class="swatch" style="--dark:0.15"><div class="fill"></div><div class="pct">70%</div></div>
+        <div class="swatch" style="--dark:0.35"><div class="fill"></div><div class="pct">50%</div></div>
+        <div class="swatch" style="--dark:0.55"><div class="fill"></div><div class="pct">35%</div></div>
+        <div class="swatch" style="--dark:0.75"><div class="fill"></div><div class="pct">20%</div></div>
+        <div class="swatch" style="--dark:0.92"><div class="fill"></div><div class="pct">5%</div></div>
+      </div>
+      <p class="note">VLT = luz visible que pasa a través del vidrio. <span>Menor % = más oscuro.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap stats-row">
+    <div class="stat"><div class="num">99%</div><div class="desc">rayos UV bloqueados</div></div>
+    <div class="stat"><div class="num">~60%</div><div class="desc">menos calor interior</div></div>
+    <div class="stat"><div class="num">100%</div><div class="desc">visibilidad de noche</div></div>
+    <div class="stat"><div class="num">1 día</div><div class="desc">instalación promedio</div></div>
+  </div>
+</section>
+
+<section class="sec" id="servicios">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Servicios</div>
+      <h2>Un vidrio a la vez</h2>
+      <p>Trabajamos con láminas certificadas, cortadas y aplicadas a la medida de cada superficie.</p>
+    </div>
+    <div class="services">
+      <div class="svc">
+        <span class="idx">Auto</span>
+        <div>
+          <h3>Vehículos</h3>
+          <p>Polarizado para carros, camionetas y flotas. Reduce el resplandor y protege el interior.</p>
+        </div>
+      </div>
+      <div class="svc">
+        <span class="idx">Hogar</span>
+        <div>
+          <h3>Residencial</h3>
+          <p>Control solar para ventanales y balcones. Más fresco adentro, sin perder la vista.</p>
+        </div>
+      </div>
+      <div class="svc">
+        <span class="idx">Oficina</span>
+        <div>
+          <h3>Comercial</h3>
+          <p>Fachadas, vidrieras y oficinas. Confort térmico y estética uniforme para el negocio.</p>
+        </div>
+      </div>
+      <div class="svc">
+        <span class="idx">Extra</span>
+        <div>
+          <h3>Film de seguridad</h3>
+          <p>Lámina anti-fragmentación que mantiene el vidrio unido ante un impacto.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="beneficios">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Por qué instalar</div>
+      <h2>Cuatro razones que se notan</h2>
+    </div>
+    <div class="benefits">
+      <div class="benefit">
+        <span class="mark2"></span>
+        <div><h3>Protección UV</h3><p>Filtra la radiación que daña la piel y decolora tapicería, pisos y muebles.</p></div>
+      </div>
+      <div class="benefit">
+        <span class="mark2"></span>
+        <div><h3>Ahorro de energía</h3><p>Menos carga térmica significa menos horas de aire acondicionado encendido.</p></div>
+      </div>
+      <div class="benefit">
+        <span class="mark2"></span>
+        <div><h3>Privacidad con luz</h3><p>Se ve hacia afuera con claridad; desde afuera, mucho menos hacia adentro.</p></div>
+      </div>
+      <div class="benefit">
+        <span class="mark2"></span>
+        <div><h3>Cuida el interior</h3><p>Reduce el desgaste del sol sobre cuero, madera y equipos electrónicos.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="proceso">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Cómo trabajamos</div>
+      <h2>De la cotización a la instalación</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="n">01</span>
+        <h3>Solicitas tu cotización</h3>
+        <p>Nos escribes por WhatsApp con el tipo de vidrio y el uso que le darás.</p>
+      </div>
+      <div class="step">
+        <span class="n">02</span>
+        <h3>Visita y medición</h3>
+        <p>Coordinamos una visita para tomar medidas y recomendar el nivel de oscurecimiento.</p>
+      </div>
+      <div class="step">
+        <span class="n">03</span>
+        <h3>Instalación y garantía</h3>
+        <p>Aplicamos la lámina el mismo día en la mayoría de los casos, con garantía por escrito.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="contacto" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="contact-box">
+      <div>
+        <h2>Hablemos de tu vidrio</h2>
+        <p>Autos, casas u oficinas — cuéntanos qué necesitas y te enviamos una cotización sin compromiso.</p>
+        <a class="btn" href="https://wa.me/584121234567" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+      </div>
+      <div class="contact-links">
+        <a href="tel:+584121234567"><span>Teléfono</span><span class="arrow">+58 412-1234567 →</span></a>
+        <a href="mailto:contacto@onpaperservice.com"><span>Correo</span><span class="arrow">contacto@onpaperservice.com →</span></a>
+        <a href="#"><span>Ubicación</span><span class="arrow">Venezuela →</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <div class="brand"><img src="logo-white.png" alt="On Paper Service"></div>
+    <p>&copy; 2026 On Paper Service &mdash; Multiservicios On Paper. Polarizado y control solar de vidrios.</p>
+  </div>
+</footer>
+
+</body>
+</html>
