@@ -139,7 +139,9 @@
   }
   .swatch .fill{
     position:absolute;inset:0;
-    background:linear-gradient(155deg, rgba(122,169,182,0.55), rgba(28,32,35,var(--dark)));
+    background:
+      linear-gradient(155deg, rgba(10,12,13,var(--dark)), rgba(10,12,13,var(--dark))),
+      linear-gradient(155deg, #9fc3cc, #4c6970);
   }
   .swatch .pct{
     position:absolute;bottom:8px;left:0;right:0;text-align:center;
@@ -276,11 +278,11 @@
     <div class="swatch-card">
       <div class="label">Niveles de oscurecimiento — VLT %</div>
       <div class="swatches">
-        <div class="swatch" style="--dark:0.15"><div class="fill"></div><div class="pct">70%</div></div>
-        <div class="swatch" style="--dark:0.35"><div class="fill"></div><div class="pct">50%</div></div>
+        <div class="swatch" style="--dark:0.05"><div class="fill"></div><div class="pct">70%</div></div>
+        <div class="swatch" style="--dark:0.3"><div class="fill"></div><div class="pct">50%</div></div>
         <div class="swatch" style="--dark:0.55"><div class="fill"></div><div class="pct">35%</div></div>
-        <div class="swatch" style="--dark:0.75"><div class="fill"></div><div class="pct">20%</div></div>
-        <div class="swatch" style="--dark:0.92"><div class="fill"></div><div class="pct">5%</div></div>
+        <div class="swatch" style="--dark:0.8"><div class="fill"></div><div class="pct">20%</div></div>
+        <div class="swatch" style="--dark:0.96"><div class="fill"></div><div class="pct">5%</div></div>
       </div>
       <p class="note">VLT = luz visible que pasa a través del vidrio. <span>Menor % = más oscuro.</span></p>
     </div>
